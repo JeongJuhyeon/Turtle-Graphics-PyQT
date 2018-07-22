@@ -90,6 +90,11 @@ class TurtlePainter(QWidget):
         self.button_color.clicked.connect(self.on_color)
         grid.addWidget(self.button_color, 1, 8, 1, 2)
 
+        self.button_color = QPushButton("Eraser")
+        self.button_color.setFixedSize(70, 40)
+        self.button_color.clicked.connect(self.on_eraser)
+        grid.addWidget(self.button_color, 2, 8, 1, 2)
+
         # Vertical layout
         vert_layout = QVBoxLayout(self)
 
@@ -122,6 +127,9 @@ class TurtlePainter(QWidget):
         painter.drawRect(0, 0, 19, 19)
         painter.end()
         self.labels[self.x + self.y * 20].setPixmap(pixmap)
+
+    def on_eraser(self):
+        self.cur_color = QColor("transparent")
 
     def on_color(self):
         self.cur_color = QColorDialog.getColor(Qt.black, self, "Choose color")
