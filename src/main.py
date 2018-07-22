@@ -49,11 +49,18 @@ class TurtlePainter(QWidget):
         self.coord_label.setGeometry(230, 20, 60, 20)
         self.coord_label.setText("(0, 0)")
 
+        # Pen status label
+        self.pen_status_label = QLabel(self)
+        self.pen_status_label.setText("Status: Up")
+        self.pen_status_label.setMaximumSize(100, 20)
+        grid.addWidget(self.pen_status_label, 2, 1, 1, 3)
+
         # Buttons
-        self.button_pendown = QPushButton("Down")
-        self.button_pendown.setFixedSize(60, 40)
-        self.button_pendown.clicked.connect(self.on_pen)
-        grid.addWidget(self.button_pendown, 1, 1, 1, 2)
+        self.button_pen = QPushButton("Pen")
+        self.button_pen.setFixedSize(60, 40)
+        self.button_pen.clicked.connect(self.on_pen)
+        grid.addWidget(self.button_pen, 1, 1, 1, 3)
+
 
         self.button_left = QPushButton("<-")
         self.button_left.setFixedSize(40, 40)
@@ -77,9 +84,9 @@ class TurtlePainter(QWidget):
         self.button_right.clicked.connect(self.on_right)
         grid.addWidget(self.button_right, 1, 6, 1, 1)
 
-        self.button_penup = QPushButton("Up")
-        self.button_penup.setFixedSize(70, 40)
-        grid.addWidget(self.button_penup, 1, 8, 1, 2)
+        self.button_color = QPushButton("Color")
+        self.button_color.setFixedSize(70, 40)
+        grid.addWidget(self.button_color, 1, 8, 1, 2)
 
         # Vertical layout
         vert_layout = QVBoxLayout(self)
@@ -116,6 +123,7 @@ class TurtlePainter(QWidget):
 
     def on_pen(self):
         self.pen_down = not self.pen_down
+        self.pen_status_label.setText("Status: Down") if self.pen_down else self.pen_status_label.setText("Status: Up")
 
     def on_left(self):
         self.button_right.setEnabled(True)
