@@ -90,11 +90,7 @@ class TurtlePainter(QWidget):
         self.coord_label.setText("({}, {})".format(self.x, self.y))
 
     def paint_current_square(self):
-        """
-        painter = QPainter(self.labels[self.x + self.y * 20].pixmap())
-        painter.setPen(Qt.black)
-        painter.fillRect(0, 0, 19, 19, Qt.black)
-        painter.end()"""
+
         pixmap = QPixmap(20, 20)
         if self.pen_down:
             pixmap.fill(QColor("black"))
@@ -118,7 +114,7 @@ class TurtlePainter(QWidget):
         self.pen_down = not self.pen_down
 
     def on_left(self):
-        if self.x == 19:
+        if self.x == 0:
             return
 
         self.un_red_previous_square()
