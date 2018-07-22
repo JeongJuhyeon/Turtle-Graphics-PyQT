@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QLabel, QGridLayout, QVBoxLayout
+from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QLabel, QGridLayout, QVBoxLayout, QColorDialog
 from PyQt5.QtGui import QPainter, QColor, QFont, QBrush, QPixmap
 from PyQt5.QtCore import Qt, QRect, QSize
 
@@ -18,6 +18,7 @@ class TurtlePainter(QWidget):
         self.x = 0
         self.y = 0
         self.pen_down = False
+        self.cur_color = Qt.black
         self.labels = []
 
         # Drawing all the squares. From (50, 50) to (450, 450)
@@ -86,6 +87,7 @@ class TurtlePainter(QWidget):
 
         self.button_color = QPushButton("Color")
         self.button_color.setFixedSize(70, 40)
+        self.button_color.clicked.connect(self.on_color)
         grid.addWidget(self.button_color, 1, 8, 1, 2)
 
         # Vertical layout
@@ -104,7 +106,7 @@ class TurtlePainter(QWidget):
     def paint_current_square(self):
         pixmap = self.labels[self.x + self.y * 20].pixmap()
         if self.pen_down:
-            pixmap.fill(QColor("black"))
+            pixmap.fill(self.cur_color)
 
         painter = QPainter(pixmap)
         painter.setPen(Qt.red)
@@ -120,6 +122,9 @@ class TurtlePainter(QWidget):
         painter.drawRect(0, 0, 19, 19)
         painter.end()
         self.labels[self.x + self.y * 20].setPixmap(pixmap)
+
+    def on_color(self):
+        self.cur_color = QColorDialog.getColor(Qt.black, self, "Choose color")
 
     def on_pen(self):
         self.pen_down = not self.pen_down
