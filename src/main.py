@@ -17,7 +17,7 @@ class TurtlePainter(QWidget):
 
         self.x = 0
         self.y = 0
-        self.pen_down = True
+        self.pen_down = False
         self.labels = []
 
         # Drawing all the squares. From (50, 50) to (450, 450)
@@ -32,6 +32,7 @@ class TurtlePainter(QWidget):
                 self.labels.append(QLabel(self))
                 self.labels[-1].setPixmap(pixmap)
                 self.labels[-1].setGeometry(50 + 20 * i, 50 + 20 * j, 20, 20)  # x, y, w, h
+        self.paint_current_square()
 
         # Grid layout
         grid = QGridLayout()
@@ -42,8 +43,10 @@ class TurtlePainter(QWidget):
         for j in range(3):
             grid.setRowMinimumHeight(j, 40)
 
+
+        # Coord label
         self.coord_label = QLabel(self)
-        self.coord_label.setGeometry(230, 20, 50, 20)
+        self.coord_label.setGeometry(230, 20, 60, 20)
         self.coord_label.setText("(0, 0)")
 
         # Buttons
@@ -55,11 +58,13 @@ class TurtlePainter(QWidget):
         self.button_left = QPushButton("<-")
         self.button_left.setFixedSize(40, 40)
         self.button_left.clicked.connect(self.on_left)
+        self.button_left.setEnabled(False)
         grid.addWidget(self.button_left, 1, 4, 1, 1)
 
         self.button_up = QPushButton("^")
         self.button_up.setFixedSize(40, 40)
         self.button_up.clicked.connect(self.on_up)
+        self.button_up.setEnabled(False)
         grid.addWidget(self.button_up, 0, 5, 1, 1)
 
         self.button_down = QPushButton("v")
@@ -90,8 +95,7 @@ class TurtlePainter(QWidget):
         self.coord_label.setText("({}, {})".format(self.x, self.y))
 
     def paint_current_square(self):
-
-        pixmap = QPixmap(20, 20)
+        pixmap = self.labels[self.x + self.y * 20].pixmap()
         if self.pen_down:
             pixmap.fill(QColor("black"))
 
@@ -114,40 +118,44 @@ class TurtlePainter(QWidget):
         self.pen_down = not self.pen_down
 
     def on_left(self):
-        if self.x == 0:
-            return
+        self.button_right.setEnabled(True)
 
         self.un_red_previous_square()
         self.x -= 1
         self.paint_current_square()
         self.update_coord_label()
+        if self.x == 0:
+            self.button_left.setDisabled(True)
 
     def on_up(self):
-        if self.y == 0:
-            return
+        self.button_down.setEnabled(True)
 
         self.un_red_previous_square()
         self.y -= 1
         self.paint_current_square()
         self.update_coord_label()
+        if self.y == 0:
+            self.button_up.setDisabled(True)
 
     def on_down(self):
-        if self.y == 19:
-            return
+        self.button_up.setEnabled(True)
 
         self.un_red_previous_square()
         self.y += 1
         self.paint_current_square()
         self.update_coord_label()
+        if self.y == 19:
+            self.button_down.setDisabled(True)
 
     def on_right(self):
-        if self.x == 19:
-            return
+        self.button_left.setEnabled(True)
 
         self.un_red_previous_square()
         self.x += 1
         self.paint_current_square()
         self.update_coord_label()
+        if self.x == 19:
+            self.button_right.setDisabled(True)
 
 
 if __name__ == '__main__':
